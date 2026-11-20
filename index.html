@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bee Café | Birati, Kolkata — Fresh Food, Happy Moments</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root {
+      --hive-yellow: #FACC15;
+      --honey-gold: #EAB308;
+      --espresso-black: #111111;
+      --cream-foam: #FFFDF5;
+    }
+    body {
+      background-color: var(--cream-foam);
+      color: var(--espresso-black);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+    .honeycomb-bg {
+      background-image: radial-gradient(#eab30826 1.5px, transparent 1.5px);
+      background-size: 22px 22px;
+    }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  </style>
+</head>
+<body class="honeycomb-bg antialiased">
+
+  <!-- Baked-in Menu & Image Data (Updated automatically when you click Download) -->
+  <script id="embedded-menu-data" type="application/json">null</script>
+
+  <!-- Owner Edit Mode Top Bar -->
+  <div id="edit-bar" class="hidden sticky top-0 z-50 bg-yellow-400 text-black px-4 py-2.5 border-b-2 border-black shadow-md">
+    <div class="max-w-6xl mx-auto flex flex-wrap items-center justify-between gap-2">
+      <div class="flex items-center gap-2 text-sm font-extrabold">
+        <span>✏️ Menu & Price Edit Mode</span>
+        <span class="hidden md:inline font-medium text-xs bg-black/10 px-2 py-0.5 rounded-full">Tap any card to edit price, details, or photo</span>
+      </div>
+      <div class="flex flex-wrap items-center gap-2">
+        <button onclick="openItemModal(null)" class="bg-green-700 hover:bg-green-800 text-white text-xs font-bold px-3 py-1.5 rounded-lg transition">
+          + Add New Item
+        </button>
+        <button onclick="exportUpdatedHTML()" class="bg-black hover:bg-neutral-800 text-yellow-400 text-xs font-bold px-3 py-1.5 rounded-lg transition">
+          ⬇ Download Updated index.html
+        </button>
+        <button onclick="resetAllMenu()" class="bg-white/80 hover:bg-white text-red-700 text-xs font-bold px-3 py-1.5 rounded-lg border border-black/20 transition">
+          Reset Default
+        </button>
+        <button onclick="exitEditMode()" class="bg-white hover:bg-neutral-100 text-black text-xs font-bold px-3 py-1.5 rounded-lg border border-black/20 transition">
+          Done
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sticky Header -->
+  <header class="sticky top-0 z-40 bg-[#111111] text-white border-b-4 border-yellow-400 shadow-lg">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-yellow-400 text-black flex items-center justify-center font-black text-xl shadow">
+          🐝
+        </div>
+        <div>
+          <h1 class="text-xl font-extrabold tracking-wide text-yellow-400 leading-none">BEE CAFÉ</h1>
+          <p class="text-xs text-neutral-300">Birati, Kolkata</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2 sm:gap-3">
+        <button onclick="openPinModal()" class="text-xs text-neutral-300 hover:text-yellow-400 border border-neutral-700 px-3 py-1.5 rounded-full transition">
+          🔒 Manage Menu
+        </button>
+        <a href="#visit" class="hidden sm:inline-block text-sm text-neutral-300 hover:text-yellow-400 transition">Visit Us</a>
+        <button onclick="toggleDrawer(true)" class="relative bg-yellow-400 hover:bg-yellow-300 text-black font-bold px-4 py-2 rounded-full text-sm flex items-center gap-2 transition shadow">
+          <span>Order Tray</span>
+          <span id="cart-count" class="bg-black text-yellow-400 text-xs font-extrabold px-2 py-0.5 rounded-full">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="bg-[#111111] text-white py-12 px-4 border-b border-neutral-800">
+    <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8">
+      <div class="max-w-xl">
+        <span class="inline-block bg-yellow-400/20 text-yellow-300 border border-yellow-400/40 text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full mb-4">
+          Visual Menu • Birati
+        </span>
+        <h2 class="text-4xl md:text-5xl font-black leading-tight mb-4">
+          Fresh Food, <span class="text-yellow-400">Happy Moments.</span>
+        </h2>
+        <p class="text-neutral-300 text-base mb-6">
+          Browse our full visual menu—from Vetki fish fries, overloaded fries, and jumbo grilled sandwiches to 9-inch pizzas, signature mojitos, and thick ice-cream shakes.
+        </p>
+        <div class="flex flex-wrap gap-3">
+          <a href="#menu" class="bg-yellow-400 hover:bg-yellow-300 text-black font-bold px-6 py-3 rounded-xl transition">
+            Explore Menu
+          </a>
+          <a href="https://wa.me/919038657518" target="_blank" class="bg-neutral-800 hover:bg-neutral-700 text-white font-semibold px-6 py-3 rounded-xl border border-neutral-700 transition">
+            WhatsApp Us
+          </a>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-3 w-full md:w-auto">
+        <div class="bg-neutral-900 border border-neutral-800 p-4 rounded-2xl">
+          <p class="text-yellow-400 font-bold text-sm">Best Seller</p>
+          <p class="font-bold mt-1">Tandoori Chicken Pizza</p>
+          <p class="text-neutral-400 text-xs mt-1">Medium 9-inch • ₹299</p>
+        </div>
+        <div class="bg-neutral-900 border border-neutral-800 p-4 rounded-2xl">
+          <p class="text-yellow-400 font-bold text-sm">House Special</p>
+          <p class="font-bold mt-1">Diamond Fish Fry</p>
+          <p class="text-neutral-400 text-xs mt-1">Authentic Vetki • ₹149</p>
+        </div>
+        <div class="bg-neutral-900 border border-neutral-800 p-4 rounded-2xl">
+          <p class="text-yellow-400 font-bold text-sm">Crowd Favorite</p>
+          <p class="font-bold mt-1">Chicken Overloaded Fries</p>
+          <p class="text-neutral-400 text-xs mt-1">Cheesy & Loaded • ₹249</p>
+        </div>
+        <div class="bg-neutral-900 border border-neutral-800 p-4 rounded-2xl">
+          <p class="text-yellow-400 font-bold text-sm">Cooler</p>
+          <p class="font-bold mt-1">Oreo Milk Shake</p>
+          <p class="text-neutral-400 text-xs mt-1">With Ice Cream • ₹149</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Menu Section -->
+  <main id="menu" class="max-w-6xl mx-auto px-4 py-10">
+    <!-- Controls -->
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+      <div class="relative flex-1 max-w-md">
+        <input
+          id="search-input"
+          type="text"
+          placeholder="Search wraps, pizzas, mojitos, fish fry..."
+          class="w-full pl-4 pr-10 py-3 rounded-xl border-2 border-neutral-200 focus:border-yellow-400 focus:outline-none bg-white shadow-sm"
+          oninput="renderMenu()"
+        />
+      </div>
+
+      <div class="flex items-center gap-2">
+        <button onclick="setDiet('all')" id="diet-all" class="diet-btn px-4 py-2 rounded-xl text-sm font-bold bg-black text-yellow-400">All</button>
+        <button onclick="setDiet('veg')" id="diet-veg" class="diet-btn px-4 py-2 rounded-xl text-sm font-bold bg-white border border-neutral-300 text-green-700">🟢 Veg</button>
+        <button onclick="setDiet('nonveg')" id="diet-nonveg" class="diet-btn px-4 py-2 rounded-xl text-sm font-bold bg-white border border-neutral-300 text-red-600">🔴 Non-Veg</button>
+      </div>
+    </div>
+
+    <!-- Category Tabs -->
+    <div id="category-tabs" class="flex gap-2 overflow-x-auto no-scrollbar pb-4 mb-6"></div>
+
+    <!-- Menu Grid -->
+    <div id="menu-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+  </main>
+
+  <!-- Visit Us Section -->
+  <section id="visit" class="bg-[#111111] text-white py-12 px-4 mt-12 border-t-4 border-yellow-400">
+    <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+      <div>
+        <h3 class="text-2xl font-black text-yellow-400 mb-2">Visit Bee Café</h3>
+        <p class="text-neutral-300 mb-2">Landmark Tower, Birati More, Birati, Kolkata - 700051</p>
+        <p class="text-sm text-neutral-400 mb-6">Open Daily: 1:00 PM – 11:00 PM • Dine-In & Takeaway</p>
+        <div class="flex flex-wrap gap-3">
+          <a href="https://wa.me/919038657518" target="_blank" class="inline-block bg-yellow-400 hover:bg-yellow-300 text-black font-bold px-5 py-2.5 rounded-xl transition">
+            Chat on WhatsApp (+91 90386 57518)
+          </a>
+          <button onclick="openPinModal()" class="inline-block bg-neutral-800 hover:bg-neutral-700 text-neutral-200 font-semibold px-4 py-2.5 rounded-xl border border-neutral-700 text-sm transition">
+            🔒 Owner Menu & Price Editor
+          </button>
+        </div>
+      </div>
+      <div class="bg-neutral-900 border border-neutral-800 rounded-2xl p-6 text-sm text-neutral-300 space-y-2">
+        <p><strong class="text-yellow-400">Add-on Note:</strong> Extra Cheese available on all Wraps for +₹40.</p>
+        <p><strong class="text-yellow-400">Pizzas:</strong> Freshly baked Medium Size (9-inch).</p>
+        <p><strong class="text-yellow-400">Sandwiches:</strong> Jumbo grilled portions.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PIN Unlock Modal -->
+  <div id="pin-modal" class="hidden fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl border-t-4 border-yellow-400">
+      <h3 class="text-lg font-black text-neutral-900">Owner Menu Manager</h3>
+      <p class="text-xs text-neutral-500 mt-1 mb-4">Enter PIN to edit prices, items, and photos (Default PIN: 1234).</p>
+      <input id="pin-input" type="password" inputmode="numeric" maxlength="6" placeholder="Enter PIN" class="w-full px-4 py-3 rounded-xl border-2 border-neutral-200 focus:border-yellow-400 focus:outline-none text-center text-lg tracking-widest font-bold" />
+      <p id="pin-error" class="text-xs text-red-600 font-semibold mt-2 hidden">Incorrect PIN. Try again.</p>
+      <div class="flex gap-2 mt-4">
+        <button onclick="closePinModal()" class="flex-1 py-2.5 rounded-xl border border-neutral-300 text-sm font-bold text-neutral-700">Cancel</button>
+        <button onclick="verifyPin()" class="flex-1 py-2.5 rounded-xl bg-black text-yellow-400 text-sm font-bold">Unlock</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unified Item & Photo Editor Modal -->
+  <div id="item-modal" class="hidden fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-4 overflow-y-auto">
+    <div class="bg-white rounded-2xl max-w-md w-full p-5 shadow-2xl border-t-4 border-yellow-400 my-auto">
+      <div class="flex items-center justify-between mb-3">
+        <h3 id="item-modal-heading" class="text-lg font-black text-neutral-900">Edit Menu Item</h3>
+        <button onclick="closeItemModal()" class="text-2xl text-neutral-400 hover:text-black leading-none">&times;</button>
+      </div>
+
+      <!-- Photo Preview & Upload -->
+      <div class="relative h-36 w-full rounded-xl overflow-hidden bg-neutral-100 border mb-3">
+        <img id="edit-preview" src="" alt="Preview" class="w-full h-full object-cover" />
+        <label class="absolute bottom-2 right-2 bg-yellow-400 hover:bg-yellow-300 text-black font-extrabold text-xs px-3 py-1.5 rounded-lg cursor-pointer shadow">
+          📁 Upload Photo
+          <input id="edit-file-input" type="file" accept="image/*" class="hidden" onchange="handleFileUpload(event)" />
+        </label>
+      </div>
+
+      <div class="space-y-3 text-sm">
+        <div>
+          <label class="block text-xs font-bold text-neutral-600 mb-1">Item Name</label>
+          <input id="edit-name" type="text" placeholder="e.g., Tandoori Chicken Pizza" class="w-full px-3 py-2 rounded-xl border focus:border-yellow-400 focus:outline-none font-semibold" />
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-bold text-neutral-600 mb-1">Price (₹)</label>
+            <input id="edit-price" type="number" min="1" placeholder="149" class="w-full px-3 py-2 rounded-xl border focus:border-yellow-400 focus:outline-none font-bold" />
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-neutral-600 mb-1">Type</label>
+            <select id="edit-veg" class="w-full px-3 py-2 rounded-xl border focus:border-yellow-400 focus:outline-none font-semibold bg-white">
+              <option value="true">🟢 Veg</option>
+              <option value="false">🔴 Non-Veg</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-neutral-600 mb-1">Category</label>
+          <select id="edit-category" class="w-full px-3 py-2 rounded-xl border focus:border-yellow-400 focus:outline-none font-semibold bg-white">
+            <option value="Starters & Snacks">Starters & Snacks</option>
+            <option value="Wraps & Fries">Wraps & Fries</option>
+            <option value="Sandwiches & Burgers">Sandwiches & Burgers</option>
+            <option value="Pizzas">Pizzas</option>
+            <option value="Mocktails & Mojitos">Mocktails & Mojitos</option>
+            <option value="Shakes & Coffee">Shakes & Coffee</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-neutral-600 mb-1">Short Description</label>
+          <input id="edit-desc" type="text" placeholder="e.g., Medium-size 9-inch" class="w-full px-3 py-2 rounded-xl border focus:border-yellow-400 focus:outline-none" />
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-neutral-600 mb-1">Or Paste Image URL</label>
+          <input id="edit-url" type="url" placeholder="https://example.com/photo.jpg" oninput="previewUrlInput()" class="w-full px-3 py-2 rounded-xl border focus:border-yellow-400 focus:outline-none text-xs" />
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between gap-2 pt-4 mt-4 border-t">
+        <button id="delete-item-btn" onclick="deleteEditingItem()" class="text-xs font-bold text-red-600 hover:underline px-2 py-2">
+          🗑 Delete Item
+        </button>
+        <div class="flex gap-2 ml-auto">
+          <button onclick="closeItemModal()" class="px-4 py-2 rounded-xl border border-neutral-300 text-xs font-bold text-neutral-700">Cancel</button>
+          <button onclick="saveItemChanges()" class="px-5 py-2 rounded-xl bg-black text-yellow-400 text-xs font-extrabold shadow">Save Changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide-Over Order Drawer -->
+  <div id="drawer-overlay" onclick="toggleDrawer(false)" class="fixed inset-0 bg-black/60 z-50 hidden"></div>
+  <aside id="order-drawer" class="fixed top-0 right-0 h-full w-full max-w-md bg-white z-50 shadow-2xl transform translate-x-full transition-transform duration-300 flex flex-col">
+    <div class="p-4 bg-[#111111] text-white flex items-center justify-between border-b-4 border-yellow-400">
+      <h3 class="text-lg font-extrabold text-yellow-400">Your Order Tray</h3>
+      <button onclick="toggleDrawer(false)" class="text-neutral-300 hover:text-white text-2xl leading-none">&times;</button>
+    </div>
+
+    <div id="cart-items" class="flex-1 overflow-y-auto p-4 space-y-3"></div>
+
+    <div class="p-4 border-t bg-neutral-50 space-y-3">
+      <div class="flex gap-2">
+        <button onclick="setOrderType('Dine-In')" id="type-dinein" class="flex-1 py-2 rounded-lg text-sm font-bold bg-black text-yellow-400">Dine-In</button>
+        <button onclick="setOrderType('Takeaway')" id="type-takeaway" class="flex-1 py-2 rounded-lg text-sm font-bold bg-white border border-neutral-300 text-neutral-700">Takeaway</button>
+      </div>
+      <input id="cust-name" type="text" placeholder="Your Name (optional)" class="w-full px-3 py-2 rounded-lg border text-sm" />
+      <input id="cust-notes" type="text" placeholder="Notes (e.g., Add Cheese ₹40 on Wrap, less spicy)" class="w-full px-3 py-2 rounded-lg border text-sm" />
+
+      <div class="flex items-center justify-between text-lg font-black pt-1">
+        <span>Total</span>
+        <span id="cart-total">₹0</span>
+      </div>
+
+      <button onclick="sendWhatsAppOrder()" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-xl transition shadow">
+        Send Order on WhatsApp
+      </button>
+    </div>
+  </aside>
+
+  <script>
+    const OWNER_PIN = "1234"; // Change this PIN anytime
+    const STORAGE_KEY = "bee_cafe_full_menu_v2";
+
+    const IMG = {
+      wrap: "https://images.unsplash.com/photo-1626700051175-6818013e1d4f?auto=format&fit=crop&w=500&q=80",
+      chickenWrap: "https://images.unsplash.com/photo-1565299585323-38d6b0865b47?auto=format&fit=crop&w=500&q=80",
+      loadedFries: "https://images.unsplash.com/photo-1585109649139-366815a0d713?auto=format&fit=crop&w=500&q=80",
+      cheese: "https://images.unsplash.com/photo-1486297678162-eb2a19b0a32d?auto=format&fit=crop&w=500&q=80",
+      fries: "https://images.unsplash.com/photo-1573080496219-bb080dd4f877?auto=format&fit=crop&w=500&q=80",
+      fish: "https://images.unsplash.com/photo-1579208030886-b937da0925dc?auto=format&fit=crop&w=500&q=80",
+      tikka: "https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?auto=format&fit=crop&w=500&q=80",
+      chickenFry: "https://images.unsplash.com/photo-1562967914-608f82629710?auto=format&fit=crop&w=500&q=80",
+      wings: "https://images.unsplash.com/photo-1527477396000-e27163b481c2?auto=format&fit=crop&w=500&q=80",
+      momo: "https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?auto=format&fit=crop&w=500&q=80",
+      samosa: "https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=500&q=80",
+      sandwich: "https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&w=500&q=80",
+      burgerVeg: "https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=500&q=80",
+      burgerChicken: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=500&q=80",
+      pizzaVeg: "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=500&q=80",
+      pizzaChicken: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=500&q=80",
+      icedTea: "https://images.unsplash.com/photo-1556679343-c7306c1976bc?auto=format&fit=crop&w=500&q=80",
+      mojitoGreen: "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=500&q=80",
+      mojitoBerry: "https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&w=500&q=80",
+      mojitoBlue: "https://images.unsplash.com/photo-1536935338788-846bb9981813?auto=format&fit=crop&w=500&q=80",
+      shakeChoco: "https://images.unsplash.com/photo-1572490122747-3968b75cc699?auto=format&fit=crop&w=500&q=80",
+      shakeMango: "https://images.unsplash.com/photo-1546173159-315724a31696?auto=format&fit=crop&w=500&q=80",
+      shakeBerry: "https://images.unsplash.com/photo-1579954115545-a95591f28bfc?auto=format&fit=crop&w=500&q=80",
+      coldCoffee: "https://images.unsplash.com/photo-1461023058943-07fcbe16d735?auto=format&fit=crop&w=500&q=80",
+      hotCoffee: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=500&q=80"
+    };
+
+    const defaultMenuData = [
+      // WRAPS & OVERLOADED FRIES
+      { id: 1, name: "Loaded Veg Wrap", category: "Wraps & Fries", price: 149, veg: true, desc: "Add Cheese ₹40 extra", img: IMG.wrap },
+      { id: 2, name: "Loaded Paneer Wrap", category: "Wraps & Fries", price: 189, veg: true, desc: "Add Cheese ₹40 extra", img: IMG.wrap },
+      { id: 3, name: "Loaded Chicken Wrap", category: "Wraps & Fries", price: 199, veg: false, desc: "Add Cheese ₹40 extra", img: IMG.chickenWrap },
+      { id: 4, name: "Ginger Chicken Wrap", category: "Wraps & Fries", price: 229, veg: false, desc: "Add Cheese ₹40 extra", img: IMG.chickenWrap },
+      { id: 5, name: "Veg Overloaded Fries", category: "Wraps & Fries", price: 199, veg: true, desc: "Loaded with sauces & cheese", img: IMG.loadedFries },
+      { id: 6, name: "Chicken Overloaded Fries", category: "Wraps & Fries", price: 249, veg: false, desc: "Loaded with chicken & cheese", img: IMG.loadedFries },
+      { id: 7, name: "Fish Overloaded Fries", category: "Wraps & Fries", price: 249, veg: false, desc: "Loaded with crispy fish & cheese", img: IMG.loadedFries },
+      { id: 8, name: "Extra Cheese Add-On (Wraps)", category: "Wraps & Fries", price: 40, veg: true, desc: "Add to any wrap", img: IMG.cheese },
+
+      // STARTERS & SNACKS
+      { id: 9, name: "Crinkle Cut French Fries Long Size", category: "Starters & Snacks", price: 169, veg: true, desc: "With Tandoori mayonnaise & Sauce", img: IMG.fries },
+      { id: 10, name: "French Fries Regular", category: "Starters & Snacks", price: 149, veg: true, desc: "With Tandoori mayonnaise & Sauce", img: IMG.fries },
+      { id: 11, name: "Fish & Chips", category: "Starters & Snacks", price: 240, veg: false, desc: "Crispy fried fish with fries", img: IMG.fish },
+      { id: 12, name: "Diamond Fish Fry (Vetki)", category: "Starters & Snacks", price: 149, veg: false, desc: "Authentic Kolkata Vetki", img: IMG.fish },
+      { id: 13, name: "Fish Finger (4 pcs - Vetki)", category: "Starters & Snacks", price: 180, veg: false, desc: "Crispy Vetki fingers", img: IMG.fish },
+      { id: 14, name: "Fish Finger (6 pcs - Vetki)", category: "Starters & Snacks", price: 249, veg: false, desc: "Crispy Vetki fingers", img: IMG.fish },
+      { id: 15, name: "Chicken Malai Tikka (6 pcs)", category: "Starters & Snacks", price: 299, veg: false, desc: "Creamy & tender", img: IMG.tikka },
+      { id: 16, name: "Chicken Finger (6 pcs)", category: "Starters & Snacks", price: 195, veg: false, desc: "Golden fried chicken strips", img: IMG.chickenFry },
+      { id: 17, name: "Chicken Breast Strip (4 pcs)", category: "Starters & Snacks", price: 160, veg: false, desc: "Crispy breast strips", img: IMG.chickenFry },
+      { id: 18, name: "Chicken Breast Strip (6 pcs)", category: "Starters & Snacks", price: 240, veg: false, desc: "Crispy breast strips", img: IMG.chickenFry },
+      { id: 19, name: "Chicken Wings (4 pcs)", category: "Starters & Snacks", price: 160, veg: false, desc: "Juicy spiced wings", img: IMG.wings },
+      { id: 20, name: "Chicken Wings (6 pcs)", category: "Starters & Snacks", price: 240, veg: false, desc: "Juicy spiced wings", img: IMG.wings },
+      { id: 21, name: "Crispy Chicken Ball (6 pcs)", category: "Starters & Snacks", price: 149, veg: false, desc: "Crunchy bite-sized chicken", img: IMG.chickenFry },
+      { id: 22, name: "Crispy Chicken Ball (12 pcs)", category: "Starters & Snacks", price: 299, veg: false, desc: "Shareable 12-piece pack", img: IMG.chickenFry },
+      { id: 23, name: "Chicken Pop Corn (12 pcs)", category: "Starters & Snacks", price: 160, veg: false, desc: "Crispy seasoned popcorn", img: IMG.chickenFry },
+      { id: 24, name: "Chicken Fried Momo (6 pcs)", category: "Starters & Snacks", price: 169, veg: false, desc: "Served with spicy dip", img: IMG.momo },
+      { id: 25, name: "Veg Paneer Fried Momo (6 pcs)", category: "Starters & Snacks", price: 159, veg: true, desc: "Served with spicy dip", img: IMG.momo },
+      { id: 26, name: "Chicken Afghani Malai Momo (6 pcs)", category: "Starters & Snacks", price: 250, veg: false, desc: "Rich Afghani malai glaze", img: IMG.momo },
+      { id: 27, name: "Punjabi Mini-Samosa Veg (4 pcs)", category: "Starters & Snacks", price: 50, veg: true, desc: "Crispy spiced mini samosas", img: IMG.samosa },
+
+      // SANDWICHES & BURGERS
+      { id: 28, name: "Veg Grilled Sandwich (Jumbo)", category: "Sandwiches & Burgers", price: 99, veg: true, desc: "Jumbo grilled sandwich", img: IMG.sandwich },
+      { id: 29, name: "Veg Grilled Cheese Sandwich (Jumbo)", category: "Sandwiches & Burgers", price: 111, veg: true, desc: "Jumbo grilled with cheese", img: IMG.sandwich },
+      { id: 30, name: "Veg Cheese Corn Grilled Sandwich (Jumbo)", category: "Sandwiches & Burgers", price: 121, veg: true, desc: "Sweet corn & melted cheese", img: IMG.sandwich },
+      { id: 31, name: "Classic Chicken Grilled Sandwich (Jumbo)", category: "Sandwiches & Burgers", price: 149, veg: false, desc: "Jumbo classic chicken", img: IMG.sandwich },
+      { id: 32, name: "Cheese Classic Chicken Grilled (Jumbo)", category: "Sandwiches & Burgers", price: 169, veg: false, desc: "Jumbo chicken & cheese", img: IMG.sandwich },
+      { id: 33, name: "Cheese Paneer Grilled Sandwich (Jumbo)", category: "Sandwiches & Burgers", price: 149, veg: true, desc: "Jumbo paneer & cheese", img: IMG.sandwich },
+      { id: 34, name: "Classic Veg Burger", category: "Sandwiches & Burgers", price: 111, veg: true, desc: "Fresh veggies & crispy patty", img: IMG.burgerVeg },
+      { id: 35, name: "Crispy Chicken Burger", category: "Sandwiches & Burgers", price: 149, veg: false, desc: "Crunchy chicken fillet", img: IMG.burgerChicken },
+      { id: 36, name: "Classic Paneer Burger", category: "Sandwiches & Burgers", price: 149, veg: true, desc: "Spiced paneer patty", img: IMG.burgerVeg },
+
+      // PIZZAS
+      { id: 37, name: "Veg Supreme Pizza (9 inch)", category: "Pizzas", price: 199, veg: true, desc: "Medium-size 9-inch", img: IMG.pizzaVeg },
+      { id: 38, name: "Paneer Tikka Pizza (9 inch)", category: "Pizzas", price: 239, veg: true, desc: "Medium-size 9-inch", img: IMG.pizzaVeg },
+      { id: 39, name: "Corn Pizza with Veggies (9 inch)", category: "Pizzas", price: 229, veg: true, desc: "Medium-size 9-inch", img: IMG.pizzaVeg },
+      { id: 40, name: "Non-Veg Classic Chicken Pizza (9 inch)", category: "Pizzas", price: 249, veg: false, desc: "Medium-size 9-inch", img: IMG.pizzaChicken },
+      { id: 41, name: "Tandoori Chicken Pizza (9 inch)", category: "Pizzas", price: 299, veg: false, desc: "Medium-size 9-inch", img: IMG.pizzaChicken },
+
+      // MOCKTAILS & MOJITOS
+      { id: 42, name: "Masala Cold Drinks", category: "Mocktails & Mojitos", price: 79, veg: true, desc: "Chilled spiced refresher", img: IMG.icedTea },
+      { id: 43, name: "Lemon Iced Tea", category: "Mocktails & Mojitos", price: 69, veg: true, desc: "Refreshing zesty iced tea", img: IMG.icedTea },
+      { id: 44, name: "Virgin Mojito", category: "Mocktails & Mojitos", price: 111, veg: true, desc: "Signature mint & lime", img: IMG.mojitoGreen },
+      { id: 45, name: "Black Currant Mojito", category: "Mocktails & Mojitos", price: 111, veg: true, desc: "Signature mojito", img: IMG.mojitoBerry },
+      { id: 46, name: "Kiwi Masala Mojito", category: "Mocktails & Mojitos", price: 121, veg: true, desc: "Tangy kiwi with masala twist", img: IMG.mojitoGreen },
+      { id: 47, name: "Green Apple Mojito", category: "Mocktails & Mojitos", price: 111, veg: true, desc: "Crisp green apple cooler", img: IMG.mojitoGreen },
+      { id: 48, name: "Strawberry Mojito", category: "Mocktails & Mojitos", price: 111, veg: true, desc: "Sweet berry cooler", img: IMG.mojitoBerry },
+      { id: 49, name: "Blue Lagoon Mojito", category: "Mocktails & Mojitos", price: 111, veg: true, desc: "Citrus blue curacao cooler", img: IMG.mojitoBlue },
+
+      // SHAKES & COFFEE
+      { id: 50, name: "Oreo Milk Shake", category: "Shakes & Coffee", price: 149, veg: true, desc: "Served with ice cream", img: IMG.shakeChoco },
+      { id: 51, name: "KitKat Milk Shake", category: "Shakes & Coffee", price: 159, veg: true, desc: "Served with ice cream", img: IMG.shakeChoco },
+      { id: 52, name: "Mango Milk Shake", category: "Shakes & Coffee", price: 149, veg: true, desc: "Served with ice cream", img: IMG.shakeMango },
+      { id: 53, name: "Strawberry Milk Shake", category: "Shakes & Coffee", price: 149, veg: true, desc: "Served with ice cream", img: IMG.shakeBerry },
+      { id: 54, name: "Snicker Milk Shake", category: "Shakes & Coffee", price: 159, veg: true, desc: "Served with ice cream", img: IMG.shakeChoco },
+      { id: 55, name: "Cold Coffee with Ice Cream (Vanilla)", category: "Shakes & Coffee", price: 149, veg: true, desc: "Chilled coffee + vanilla scoop", img: IMG.coldCoffee },
+      { id: 56, name: "Cold Coffee with Ice Cream (Chocolate)", category: "Shakes & Coffee", price: 149, veg: true, desc: "Chilled coffee + chocolate scoop", img: IMG.coldCoffee },
+      { id: 57, name: "Caramel Cold Coffee with Ice Cream (Vanilla)", category: "Shakes & Coffee", price: 149, veg: true, desc: "Caramel drizzle + vanilla scoop", img: IMG.coldCoffee },
+      { id: 58, name: "Cappuccino", category: "Shakes & Coffee", price: 89, veg: true, desc: "Hot beverage", img: IMG.hotCoffee },
+      { id: 59, name: "Regular Coffee", category: "Shakes & Coffee", price: 55, veg: true, desc: "Hot beverage", img: IMG.hotCoffee },
+      { id: 60, name: "Hot Chocolate Coffee", category: "Shakes & Coffee", price: 65, veg: true, desc: "Hot beverage", img: IMG.hotCoffee }
+    ];
+
+    function loadMenuData() {
+      try {
+        const local = JSON.parse(localStorage.getItem(STORAGE_KEY));
+        if (Array.isArray(local) && local.length) return local;
+      } catch (e) {}
+      try {
+        const embedded = JSON.parse(document.getElementById("embedded-menu-data").textContent);
+        if (Array.isArray(embedded) && embedded.length) return embedded;
+      } catch (e) {}
+      return JSON.parse(JSON.stringify(defaultMenuData));
+    }
+
+    let menuData = loadMenuData();
+    const categories = ["All", "Starters & Snacks", "Wraps & Fries", "Sandwiches & Burgers", "Pizzas", "Mocktails & Mojitos", "Shakes & Coffee"];
+    let activeCategory = "All";
+    let activeDiet = "all";
+    let orderType = "Dine-In";
+    let cart = {};
+    let editMode = false;
+    let editingItemId = null;
+    let tempImgData = "";
+
+    function saveMenuData() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(menuData));
+      } catch (e) {
+        alert("Browser storage is full. Click 'Download Updated index.html' to save your changes permanently.");
+      }
+    }
+
+    // --- PIN & Edit Mode ---
+    function openPinModal() {
+      if (editMode) return;
+      document.getElementById("pin-input").value = "";
+      document.getElementById("pin-error").classList.add("hidden");
+      document.getElementById("pin-modal").classList.remove("hidden");
+      setTimeout(() => document.getElementById("pin-input").focus(), 50);
+    }
+
+    function closePinModal() {
+      document.getElementById("pin-modal").classList.add("hidden");
+    }
+
+    function verifyPin() {
+      const entered = document.getElementById("pin-input").value.trim();
+      if (entered === OWNER_PIN) {
+        closePinModal();
+        editMode = true;
+        document.getElementById("edit-bar").classList.remove("hidden");
+        renderMenu();
+      } else {
+        document.getElementById("pin-error").classList.remove("hidden");
+      }
+    }
+
+    document.getElementById("pin-input").addEventListener("keydown", e => {
+      if (e.key === "Enter") verifyPin();
+    });
+
+    function exitEditMode() {
+      editMode = false;
+      document.getElementById("edit-bar").classList.add("hidden");
+      renderMenu();
+    }
+
+    // --- Unified Item & Photo Editor Modal ---
+    function openItemModal(id) {
+      editingItemId = id;
+      document.getElementById("edit-file-input").value = "";
+
+      if (id === null) {
+        document.getElementById("item-modal-heading").innerText = "Add New Menu Item";
+        document.getElementById("delete-item-btn").classList.add("hidden");
+        document.getElementById("edit-name").value = "";
+        document.getElementById("edit-price").value = "";
+        document.getElementById("edit-veg").value = "true";
+        document.getElementById("edit-category").value = activeCategory === "All" ? "Starters & Snacks" : activeCategory;
+        document.getElementById("edit-desc").value = "";
+        document.getElementById("edit-url").value = "";
+        tempImgData = "https://placehold.co/500x320/111111/FACC15?text=Bee+Cafe";
+        document.getElementById("edit-preview").src = tempImgData;
+      } else {
+        const item = menuData.find(m => m.id === id);
+        if (!item) return;
+        document.getElementById("item-modal-heading").innerText = "Edit Item & Photo";
+        document.getElementById("delete-item-btn").classList.remove("hidden");
+        document.getElementById("edit-name").value = item.name;
+        document.getElementById("edit-price").value = item.price;
+        document.getElementById("edit-veg").value = String(item.veg);
+        document.getElementById("edit-category").value = item.category;
+        document.getElementById("edit-desc").value = item.desc;
+        tempImgData = item.img;
+        document.getElementById("edit-url").value = item.img.startsWith("http") ? item.img : "";
+        document.getElementById("edit-preview").src = item.img;
+      }
+
+      document.getElementById("item-modal").classList.remove("hidden");
+    }
+
+    function closeItemModal() {
+      editingItemId = null;
+      document.getElementById("item-modal").classList.add("hidden");
+    }
+
+    function handleFileUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        const img = new Image();
+        img.onload = function () {
+          const MAX_W = 500;
+          const scale = img.width > MAX_W ? MAX_W / img.width : 1;
+          const canvas = document.createElement("canvas");
+          canvas.width = Math.round(img.width * scale);
+          canvas.height = Math.round(img.height * scale);
+          canvas.getContext("2d").drawImage(img, 0, 0, canvas.width, canvas.height);
+
+          tempImgData = canvas.toDataURL("image/jpeg", 0.72);
+          document.getElementById("edit-preview").src = tempImgData;
+          document.getElementById("edit-url").value = "";
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function previewUrlInput() {
+      const url = document.getElementById("edit-url").value.trim();
+      if (url) {
+        tempImgData = url;
+        document.getElementById("edit-preview").src = url;
+      }
+    }
+
+    function saveItemChanges() {
+      const name = document.getElementById("edit-name").value.trim();
+      const price = Number(document.getElementById("edit-price").value);
+      const veg = document.getElementById("edit-veg").value === "true";
+      const category = document.getElementById("edit-category").value;
+      const desc = document.getElementById("edit-desc").value.trim();
+      const urlField = document.getElementById("edit-url").value.trim();
+      const finalImg = urlField || tempImgData || "https://placehold.co/500x320/111111/FACC15?text=Bee+Cafe";
+
+      if (!name) return alert("Please enter an item name.");
+      if (!price || price <= 0) return alert("Please enter a valid price.");
+
+      if (editingItemId === null) {
+        const nextId = menuData.reduce((max, item) => Math.max(max, item.id), 0) + 1;
+        menuData.unshift({ id: nextId, name, category, price, veg, desc, img: finalImg });
+      } else {
+        const idx = menuData.findIndex(m => m.id === editingItemId);
+        if (idx !== -1) {
+          menuData[idx] = { ...menuData[idx], name, category, price, veg, desc, img: finalImg };
+        }
+      }
+
+      saveMenuData();
+      closeItemModal();
+      renderMenu();
+      renderCart();
+    }
+
+    function deleteEditingItem() {
+      if (editingItemId === null) return;
+      if (!confirm("Delete this item from the menu?")) return;
+      menuData = menuData.filter(m => m.id !== editingItemId);
+      delete cart[editingItemId];
+      saveMenuData();
+      closeItemModal();
+      renderMenu();
+      renderCart();
+    }
+
+    function resetAllMenu() {
+      if (!confirm("Reset all prices, items, and photos back to the original menu?")) return;
+      menuData = JSON.parse(JSON.stringify(defaultMenuData));
+      localStorage.removeItem(STORAGE_KEY);
+      cart = {};
+      renderMenu();
+      renderCart();
+    }
+
+    // Export a ready-to-host index.html with all updated prices, items, and photos baked inside
+    function exportUpdatedHTML() {
+      const clone = document.documentElement.cloneNode(true);
+      clone.querySelector("#embedded-menu-data").textContent = JSON.stringify(menuData);
+      clone.querySelector("#edit-bar").classList.add("hidden");
+      clone.querySelector("#pin-modal").classList.add("hidden");
+      clone.querySelector("#item-modal").classList.add("hidden");
+      clone.querySelector("#drawer-overlay").classList.add("hidden");
+      clone.querySelector("#order-drawer").classList.add("translate-x-full");
+      clone.querySelector("#menu-grid").innerHTML = "";
+      clone.querySelector("#category-tabs").innerHTML = "";
+      clone.querySelector("#cart-items").innerHTML = "";
+      clone.querySelector("#cart-count").innerText = "0";
+      clone.querySelector("#cart-total").innerText = "₹0";
+
+      const htmlContent = "<!DOCTYPE html>\n" + clone.outerHTML;
+      const blob = new Blob([htmlContent], { type: "text/html" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "index.html";
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    // --- Menu & Cart ---
+    function renderCategories() {
+      const container = document.getElementById("category-tabs");
+      container.innerHTML = categories.map(cat => `
+        <button onclick="setCategory('${cat}')"
+          class="whitespace-nowrap px-4 py-2 rounded-full text-sm font-bold transition ${
+            activeCategory === cat
+              ? 'bg-yellow-400 text-black shadow'
+              : 'bg-white text-neutral-700 border border-neutral-300 hover:border-yellow-400'
+          }">
+          ${cat}
+        </button>
+      `).join("");
+    }
+
+    function setCategory(cat) {
+      activeCategory = cat;
+      renderCategories();
+      renderMenu();
+    }
+
+    function setDiet(diet) {
+      activeDiet = diet;
+      document.querySelectorAll(".diet-btn").forEach(btn => {
+        btn.classList.remove("bg-black", "text-yellow-400");
+        btn.classList.add("bg-white", "border", "border-neutral-300");
+      });
+      const activeBtn = document.getElementById(`diet-${diet}`);
+      activeBtn.classList.remove("bg-white", "border", "border-neutral-300");
+      activeBtn.classList.add("bg-black", "text-yellow-400");
+      renderMenu();
+    }
+
+    function updateQty(id, delta) {
+      cart[id] = (cart[id] || 0) + delta;
+      if (cart[id] <= 0) delete cart[id];
+      renderMenu();
+      renderCart();
+    }
+
+    function renderMenu() {
+      const query = document.getElementById("search-input").value.toLowerCase();
+      const filtered = menuData.filter(item => {
+        const matchCat = activeCategory === "All" || item.category === activeCategory;
+        const matchDiet = activeDiet === "all" || (activeDiet === "veg" ? item.veg : !item.veg);
+        const matchSearch = item.name.toLowerCase().includes(query) || item.desc.toLowerCase().includes(query);
+        return matchCat && matchDiet && matchSearch;
+      });
+
+      const grid = document.getElementById("menu-grid");
+      if (!filtered.length) {
+        grid.innerHTML = `<p class="col-span-full text-center text-neutral-500 py-10">No items match your search.</p>`;
+        return;
+      }
+
+      grid.innerHTML = filtered.map(item => {
+        const qty = cart[item.id] || 0;
+        return `
+          <div class="bg-white rounded-2xl overflow-hidden border border-neutral-200 shadow-sm hover:border-yellow-400 hover:shadow-md transition flex flex-col justify-between">
+            <div>
+              <div class="relative h-44 w-full bg-neutral-900 overflow-hidden">
+                <img
+                  src="${item.img}"
+                  alt="${item.name}"
+                  loading="lazy"
+                  onerror="this.src='https://placehold.co/500x320/111111/FACC15?text=Bee+Cafe'"
+                  class="w-full h-full object-cover hover:scale-105 transition duration-300"
+                />
+                <span class="absolute top-3 left-3 text-[11px] font-extrabold px-2.5 py-1 rounded-full shadow ${item.veg ? 'bg-green-600 text-white' : 'bg-red-600 text-white'}">
+                  ${item.veg ? '● VEG' : '● NON-VEG'}
+                </span>
+                <span class="absolute bottom-2 right-2 bg-black/75 text-yellow-400 text-[11px] font-semibold px-2 py-0.5 rounded-md">
+                  ${item.category}
+                </span>
+                ${editMode ? `
+                  <button onclick="openItemModal(${item.id})" class="absolute inset-0 bg-black/45 hover:bg-black/60 flex items-center justify-center transition">
+                    <span class="bg-yellow-400 text-black font-extrabold text-xs px-4 py-2 rounded-full shadow-lg">
+                      ✏️ Edit Item & Photo
+                    </span>
+                  </button>
+                ` : ''}
+              </div>
+              <div class="p-4 pb-2">
+                <h4 class="font-extrabold text-base text-neutral-900 leading-snug">${item.name}</h4>
+                <p class="text-xs text-neutral-500 mt-1">${item.desc}</p>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between px-4 pb-4 pt-3 mt-2 border-t border-neutral-100">
+              <span class="text-lg font-black text-neutral-900">₹${item.price}</span>
+              ${editMode ? `
+                <button onclick="openItemModal(${item.id})" class="bg-yellow-400 hover:bg-yellow-300 text-black font-bold text-xs px-3 py-1.5 rounded-xl transition">
+                  Edit Price
+                </button>
+              ` : (qty === 0 ? `
+                <button onclick="updateQty(${item.id}, 1)" class="bg-black hover:bg-neutral-800 text-yellow-400 font-bold text-xs px-4 py-2 rounded-xl transition">
+                  + ADD
+                </button>
+              ` : `
+                <div class="flex items-center gap-2 bg-yellow-400 rounded-xl px-2 py-1">
+                  <button onclick="updateQty(${item.id}, -1)" class="w-6 h-6 font-black text-black">-</button>
+                  <span class="font-bold text-sm text-black">${qty}</span>
+                  <button onclick="updateQty(${item.id}, 1)" class="w-6 h-6 font-black text-black">+</button>
+                </div>
+              `)}
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function renderCart() {
+      const entries = Object.entries(cart);
+      const totalItems = entries.reduce((sum, [, q]) => sum + q, 0);
+      document.getElementById("cart-count").innerText = totalItems;
+
+      const list = document.getElementById("cart-items");
+      if (!entries.length) {
+        list.innerHTML = `<p class="text-center text-neutral-400 py-12 text-sm">Your tray is empty. Add items from the menu!</p>`;
+        document.getElementById("cart-total").innerText = "₹0";
+        return;
+      }
+
+      let total = 0;
+      list.innerHTML = entries.map(([id, qty]) => {
+        const item = menuData.find(m => m.id == id);
+        if (!item) return "";
+        const subtotal = item.price * qty;
+        total += subtotal;
+        return `
+          <div class="flex items-center justify-between bg-neutral-50 p-3 rounded-xl border">
+            <div class="flex items-center gap-3">
+              <img src="${item.img}" alt="${item.name}" class="w-12 h-12 rounded-lg object-cover border" />
+              <div>
+                <p class="font-bold text-sm leading-tight">${item.name}</p>
+                <p class="text-xs text-neutral-500 mt-0.5">₹${item.price} × ${qty} = ₹${subtotal}</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-2 bg-yellow-400 rounded-lg px-2 py-1">
+              <button onclick="updateQty(${item.id}, -1)" class="w-5 h-5 font-black text-black">-</button>
+              <span class="font-bold text-xs text-black">${qty}</span>
+              <button onclick="updateQty(${item.id}, 1)" class="w-5 h-5 font-black text-black">+</button>
+            </div>
+          </div>
+        `;
+      }).join("");
+
+      document.getElementById("cart-total").innerText = `₹${total}`;
+    }
+
+    function toggleDrawer(open) {
+      const drawer = document.getElementById("order-drawer");
+      const overlay = document.getElementById("drawer-overlay");
+      if (open) {
+        drawer.classList.remove("translate-x-full");
+        overlay.classList.remove("hidden");
+      } else {
+        drawer.classList.add("translate-x-full");
+        overlay.classList.add("hidden");
+      }
+    }
+
+    function setOrderType(type) {
+      orderType = type;
+      document.getElementById("type-dinein").className = type === "Dine-In"
+        ? "flex-1 py-2 rounded-lg text-sm font-bold bg-black text-yellow-400"
+        : "flex-1 py-2 rounded-lg text-sm font-bold bg-white border border-neutral-300 text-neutral-700";
+      document.getElementById("type-takeaway").className = type === "Takeaway"
+        ? "flex-1 py-2 rounded-lg text-sm font-bold bg-black text-yellow-400"
+        : "flex-1 py-2 rounded-lg text-sm font-bold bg-white border border-neutral-300 text-neutral-700";
+    }
+
+    function sendWhatsAppOrder() {
+      const entries = Object.entries(cart);
+      if (!entries.length) return alert("Please add at least one item to your tray.");
+
+      const name = document.getElementById("cust-name").value.trim();
+      const notes = document.getElementById("cust-notes").value.trim();
+      let total = 0;
+
+      let msg = `*New Order for Bee Café* 🐝\n*Type:* ${orderType}\n`;
+      if (name) msg += `*Customer:* ${name}\n`;
+      msg += `\n*Items:*\n`;
+
+      entries.forEach(([id, qty]) => {
+        const item = menuData.find(m => m.id == id);
+        if (!item) return;
+        const sub = item.price * qty;
+        total += sub;
+        msg += `• ${item.name} × ${qty} — ₹${sub}\n`;
+      });
+
+      msg += `\n*Total: ₹${total}*`;
+      if (notes) msg += `\n*Notes:* ${notes}`;
+
+      window.open(`https://wa.me/919038657518?text=${encodeURIComponent(msg)}`, "_blank");
+    }
+
+    renderCategories();
+    renderMenu();
+    renderCart();
+  </script>
+</body>
+</html>
